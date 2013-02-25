@@ -8,9 +8,17 @@
     }
     table{
         font-weight: bold;
+        color: white;
+    }
+    fieldset{
+        #font-weight: bold;
+        color: white;    
     }
     .box{
-        background-color: #CFE3FC;
+        background-color: #6F839C;
+        #778ba4;
+        #97ABC4;
+        #CFE3FC;
         #f0f0f0;
         #margin-top: 15px; 
         #margin-bottom: 15px;

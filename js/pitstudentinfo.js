@@ -80,7 +80,8 @@ var pointToFirstRecord = function(){
 //------------------------------------------------
 var nowShowRecord = function(){
     var record = records[recordPointer].split(",");
-    for( var i = 0; i< record.length; i++ ) {
+    o("field0").value = record[0];
+    for( var i = 1; i< record.length; i++ ) {
         o("field"+i.toString()).value = " " + record[i];
     }
     o("c").innerHTML = recordPointer;
@@ -128,7 +129,7 @@ var pointToFinalRecord = function(){
 function fastForward(){
     if(greenLight){
         forward();
-        setTimeout(fastForward, delay);
+        callAfterMilliseconds(fastForward, delay);//setTimeout(fastForward, delay);
     }
     else greenLight = true;        
 }
@@ -222,8 +223,9 @@ function step(){
      else if( window.event.keyCode === 37 ) reverse();
 }
 //=================================================
-function getIt(){
-
+function senseChange(){
+ if (o().value.toLowerCase() !== currentMatch.toLowerCase()) search();
+ callAfterMilliseconds(senseChange,300);
 }
 //=================================================
 function init(){

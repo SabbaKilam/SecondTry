@@ -74,4 +74,19 @@ forTwoArrays = function(ary1, ary2, action){
     return true;
 };
 //===================================================
+function callAfterMilliseconds(functionName,delay){
+    return  setTimeout(functionName, delay)
+}
+
+
+
+
+
+
+
+
+
+
+
+
     
