@@ -226,7 +226,7 @@ function getIt(){
 //=================================================
 function init(){
     o("match").focus();
-    ajax.open("GET", "//dl.dropbox.com/u/21142484/_SIT213/SecondTry/docs/people.csv", true );
+    ajax.open("GET", "https://dl.dropbox.com/u/21142484/_SIT213/SecondTry/docs/people.csv", true );
     ajax.onreadystatechange = function() {
         if ( ajax.readyState == 4 ){
             if ( ajax.status == 200 || ajax.status == 0 ){
