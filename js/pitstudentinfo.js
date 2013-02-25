@@ -36,6 +36,8 @@ objectEventHandler( o("fs"), "click", forwardStop );
 //=================================================
 objectEventHandler( o("match"), "keyup", search );
 //=================================================
+objectEventHandler( o("match"), "change", search );
+//=================================================
 objectEventHandler( document.body, "keydown", step );
 //=================================================
 objectEventHandler(o("btnClear"), "click", clearSearch );
