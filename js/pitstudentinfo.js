@@ -166,7 +166,7 @@ function shortRedLight(){
 }
 //=================================================
 function search(){
-    if ( o("match").value === "" ) {
+    if ( o("match").value === "" ) {        
         shortRedLight();
         clearSearch();
         matchCount = 0;
@@ -211,7 +211,7 @@ function matchFound(n){
 //=================================================
 function clearSearch(){
     o("match").value = "";
-    o("match").focus();
+    o("match").blur();
     o('matchCount').innerHTML = "0"
     o('matchIndex').innerHTML = "0"
     indexPointer = 0;
