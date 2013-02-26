@@ -224,7 +224,7 @@ function step(){
 }
 //=================================================
 function senseChange(){
- if (o().value.toLowerCase() !== currentMatch.toLowerCase()) search();
+ if (o("match").value.toLowerCase() !== currentMatch.toLowerCase()) search();
  callAfterMilliseconds(senseChange,300);
 }
 //=================================================
@@ -248,7 +248,7 @@ function init(){
     ajax.send(null);
 }
 //==============================================
-
+senseChange();
 
 
 
