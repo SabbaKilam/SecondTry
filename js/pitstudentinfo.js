@@ -243,7 +243,7 @@ function init(){
             else { 
                 if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();                
             }            
-        }       
+        }      
     };
     ajax.send(null);
 }
