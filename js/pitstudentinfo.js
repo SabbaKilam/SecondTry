@@ -258,7 +258,6 @@ function init(){
     ajax.send(null);
 }
 //==============================================
-//==============================================
 function singularPlural(word,count){
     return ((count == 1)?word:word+"es");
 }
