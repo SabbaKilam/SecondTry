@@ -87,6 +87,7 @@ var nowShowRecord = function(){
     o("c").innerHTML = recordPointer;
     if( matchCount != 0 ){
         o('matchIndex').innerHTML = indexPointer +1;
+        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
     }    
 };
 //=============Reverse Button Handler===========
@@ -169,7 +170,9 @@ function search(){
     if ( o("match").value === "" ) {        
         shortRedLight();
         clearSearch();
+        o("match").focus();
         matchCount = 0;
+        o('sp').innerHTML = singularPlural("match", matchCount)+" ";        
         currentMatch = ""
         return;
     }
@@ -189,19 +192,23 @@ function search(){
             matchCount += 1;
         }
     }
+    o('sp').innerHTML = singularPlural("match", matchCount)+" ";   
     currentMatch = o("match").value.toLowerCase();
     
     indexPointer = 0;    
     if ( matchCount !== 0 ){
         recordPointer = matchIndexes[0];
         o('matchIndex').innerHTML = "1";
+        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
         nowShowRecord();
     }
     else{
-        o('matchCount').innerHTML = "0"
-        o('matchIndex').innerHTML = "0"
+        o('matchCount').innerHTML = "0";
+        o('sp').innerHTML = "matches ";
+        o('matchIndex').innerHTML = "0";
     }
     o('matchCount').innerHTML = matchCount.toString();
+    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
     //return false;
 }
 //=================================================
@@ -211,8 +218,11 @@ function matchFound(n){
 //=================================================
 function clearSearch(){
     o("match").value = "";
-    o("match").blur();
+    //o("match").blur();
+    o("btnClear").focus();
     o('matchCount').innerHTML = "0"
+    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
+    o('sp').innerHTML = "matches ";
     o('matchIndex').innerHTML = "0"
     indexPointer = 0;
     matchCount = 0;
@@ -248,7 +258,14 @@ function init(){
     ajax.send(null);
 }
 //==============================================
+//==============================================
+function singularPlural(word,count){
+    return ((count == 1)?word:word+"es");
+}
+//===============================================
 senseChange();
+//===============================================
+
 
 
 
