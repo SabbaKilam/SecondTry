@@ -275,6 +275,7 @@ function email(){
         "<"+
         o("field2").value.trim()+
         ">";
+        o("mail").target="_blank";
         o("mail").click();
     }
     callAfterMilliseconds(function(){
