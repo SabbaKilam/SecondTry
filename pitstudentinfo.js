@@ -266,20 +266,10 @@ function singularPlural(word,count){
 //===============================================
 function email(){
     o("field2").select();
-    if ( confirm("Click OK to send email.") ){
-        o("mail").href="mailto:"+
-        o('field1').value+
-        " "+
-        o('field0').value+
-        " "+
-        "<"+
-        o("field2").value.trim()+
-        ">";
+    if ( confirm("Is it OK to send an email\rto this address?\r(If not, Cancel)") ){
+        o("mail").href="mailto:".o("field2").value;
         o("mail").click();
-    }
-    callAfterMilliseconds(function(){
-        o("mail").href="";
-    },100);
+    }  
 }
 //===============================================
 senseChange();
