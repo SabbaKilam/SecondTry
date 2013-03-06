@@ -5,11 +5,16 @@ return document.getElementById(s);
 }
 //==============Attach handler to an object for an ====
 objectEventHandler = function(o,e,h){
-	if(typeof o.addEventListener == "function"){
-		o.addEventListener(e,h);
-	}
-	else{
-		o.attachEvent("on"+e,h,false);
+    try{
+        if(typeof o.addEventListener == "function"){
+            o.addEventListener(e,h);
+        }
+    }   
+	catch(err){
+        try{
+            o.attachEvent("on"+e,h,false);
+        }
+        catch(err){}
 	}
 };
 //================Create Ajax object=========================
@@ -61,9 +66,9 @@ ajaxUploadsFiles = function() {//http://blog.new-bamboo.co.uk/2012/01/10/ridicul
         return o.getElementsByTagName(s);
     }
 //=======================================================    
-function forAll(array, action) {
+function forAll(array, aFunction) {
   for (var i = 0; i < array.length; i++)
-    action(array[i]);
+    aFunction(array[i]);
 }
 //=================================================
 forTwoArrays = function(ary1, ary2, action){
@@ -77,6 +82,7 @@ forTwoArrays = function(ary1, ary2, action){
 function callAfterMilliseconds(functionName,delay){
     return  setTimeout(functionName, delay)
 }
+//=====================================================
 
 
 

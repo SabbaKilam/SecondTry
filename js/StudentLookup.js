@@ -14,35 +14,24 @@ var ajax = new HttpObject()
 //==============Handlers and Functions=============
 objectEventHandler( window, "load", init );
 //=================================================
-objectEventHandler( o("f"), "click", forward );
-//=================================================
-objectEventHandler( o("r"), "click", reverse );
-//=========================================================
-//objectEventHandler( o("ff"), "mousedown", fastForward );
-//---------------------------------------------------------
-//objectEventHandler( o("ff"), "mouseup", stopFastForward );
-//---------------------------------------------------------
-//objectEventHandler( o("ff"), "mouseout", shortRedLight );
-//=========================================================
-//objectEventHandler( o("fr"), "mousedown", fastReverse );
-//---------------------------------------------------------
-//objectEventHandler( o("fr"), "mouseup", stopFastReverse );
-//---------------------------------------------------------
-//objectEventHandler( o("fr"), "mouseout", shortRedLight );
-//=========================================================
-objectEventHandler( o("rs"), "click", reverseStop );
-//=================================================
-objectEventHandler( o("fs"), "click", forwardStop );
-//=================================================
 objectEventHandler( o("match"), "keyup", search );
 //=================================================
 objectEventHandler( o("match"), "change", search );
 //=================================================
-objectEventHandler( document.body, "keydown", step );
+objectEventHandler( document.body, "keydown", showNext );
 //=================================================
-objectEventHandler(o("btnClear"), "click", clearSearch );
+var actionFields = ["field6","field7","field8","field9","field10","field11"];
+forAll( actionFields, function( field ) {
+    objectEventHandler(o(field), "mouseover", function() { highlight(field); } ); 
+    objectEventHandler(o(field), "mouseout", function() { highlight(field); } );
+    objectEventHandler(o(field), "click", function() { emailOrCall(field); } );     
+});
 //=================================================
-objectEventHandler(o("field2"), "click", email);
+var buttons = ["f","r","rs","fs","btnClear"];
+var handlers = [forward,reverse,reverseStop,forwardStop,clearSearch];
+forTwoArrays(buttons, handlers, function(button,handler){
+    objectEventHandler(o(button), "click", handler);
+});
 //==============Forward Button Handler=============
 function forward(){
     if ( notTooFar() ) pointToNextRecord();
@@ -50,7 +39,7 @@ function forward(){
     nowShowRecord();
 }
 //----------Details of forward button handler-------
-var notTooFar = function(){
+function notTooFar(){
     if ( o("match").value === ""  ){
         if ( recordPointer +1 < recordCount ) return true;
         else return false;
@@ -59,18 +48,18 @@ var notTooFar = function(){
         if ( indexPointer +1 < matchCount) return true;
         else return false;       
     }
-};
+}
 //-------------------------------------------------
-var pointToNextRecord = function(){
+function pointToNextRecord(){
     if( o("match").value === "" ){
         recordPointer++;
     }
     else{
         recordPointer = matchIndexes[++indexPointer];
     }
-};
+}
 //-------------------------------------------------
-var pointToFirstRecord = function(){
+function pointToFirstRecord(){
     if( o("match").value === "" ){
         recordPointer = 1;
     }
@@ -78,20 +67,31 @@ var pointToFirstRecord = function(){
         indexPointer = 0;
         recordPointer = matchIndexes[indexPointer];    
     }
-};
+}
 //------------------------------------------------
-var nowShowRecord = function(){
-    var record = records[recordPointer].split(",");
-    o("field0").value = record[0];
+function nowShowRecord(){
+    try{
+        var record = records[recordPointer].split(",");
+    }
+    catch(err){
+        return; //in case records[recordPointer] is undefined and can't split()
+    }
+    try{
+        o("field0").value = record[0];
+    }
+    catch(err){}
     for( var i = 1; i< record.length; i++ ) {
-        o("field"+i.toString()).value = " " + record[i];
+        try{    
+            o("field"+i.toString()).value = record[i];
+        }
+        catch(err){}
     }
     o("c").innerHTML = recordPointer;
     if( matchCount != 0 ){
         o('matchIndex').innerHTML = indexPointer +1;
-        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
+        o('sp').innerHTML = singularPlural("match", matchCount);
     }    
-};
+}
 //=============Reverse Button Handler===========
 function reverse(){
     if ( notTooFarBack() ) pointToPreviousRecord();
@@ -174,18 +174,22 @@ function search(){
         clearSearch();
         o("match").focus();
         matchCount = 0;
-        o('sp').innerHTML = singularPlural("match", matchCount)+" ";        
+        o('sp').innerHTML = singularPlural("match", matchCount);        
         currentMatch = ""
         return;
     }
     //---------------------------------------------
-    if ( window.event.keyCode === 13 ){ 
-        forward();
-        return;
+    try{
+        if ( (typeof window.event != undefined) && window.event.keyCode === 13 ){ 
+            forward();
+            return;
+        }
     }
-    else if( o("match").value.toLowerCase() == currentMatch.toLowerCase() ){
-        return;
+    catch(err) 
+    {
+        if( o("match").value.toLowerCase() == currentMatch.toLowerCase() ) return;
     }
+    
     matchCount = 0;
     matchIndexes.length = 0;
     for ( var i = 1; i < recordCount; i++){
@@ -194,55 +198,115 @@ function search(){
             matchCount += 1;
         }
     }
-    o('sp').innerHTML = singularPlural("match", matchCount)+" ";   
+    o('sp').innerHTML = singularPlural("match", matchCount);   
     currentMatch = o("match").value.toLowerCase();
     
     indexPointer = 0;    
     if ( matchCount !== 0 ){
         recordPointer = matchIndexes[0];
         o('matchIndex').innerHTML = "1";
-        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
+        o('sp').innerHTML = singularPlural("match", matchCount);
         nowShowRecord();
     }
     else{
         o('matchCount').innerHTML = "0";
-        o('sp').innerHTML = "matches ";
+        o('sp').innerHTML = "matches";
         o('matchIndex').innerHTML = "0";
     }
     o('matchCount').innerHTML = matchCount.toString();
-    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
-    //return false;
+    o('sp').innerHTML = singularPlural("match", matchCount);    
 }
 //=================================================
-function matchFound(n){
-    return records[n].toLowerCase().indexOf(o("match").value.toLowerCase() ) != -1;
+function matchFound(i){
+    return records[i].toLowerCase().indexOf(o("match").value.toLowerCase() ) != -1;
 }
 //=================================================
 function clearSearch(){
     o("match").value = "";
-    //o("match").blur();
     o("btnClear").focus();
     o('matchCount').innerHTML = "0"
-    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
-    o('sp').innerHTML = "matches ";
+    o('sp').innerHTML = singularPlural("match", matchCount)    
+    o('sp').innerHTML = "matches";
     o('matchIndex').innerHTML = "0"
     indexPointer = 0;
     matchCount = 0;
 }
 //=================================================
-function step(){
+function singularPlural(word,count){
+    return ((count == 1)?word:word+"es");
+}
+//===============================================
+function deselect(){
+    try{
+        if ( typeof document.selection.empty() == "function" ){  // IE
+        document.selection.empty();
+        }
+    }
+    catch(e) {window.getSelection().removeAllRanges();}  // Most Browsers
+}
+//===============================================
+function eventType() {
+	if ( !e ) var e = window.event;
+	return e.type;
+}
+//===============================================
+function highlight(id){
+    if ( eventType() == "mouseover" ){
+        o(id).select();
+        o(id).style.cursor="pointer";
+    }
+    else if ( eventType() == "mouseout" ){
+        deselect();
+        o(id).style.cursor="default"; 
+    }
+}
+//===============================================
+function emailOrCall( id ){
+    if( o(id) == o("field6") || o(id) == o("field7") ){
+        sendEmail(id);
+    }
+    else{
+        callNumber(id);
+    }
+}
+//===============================================
+function sendEmail(id){
+    if ( confirm("OK to send email?") ){        
+        document.location.href = "mailto:"+
+        o('field2').value+
+        " "+
+        o('field1').value+
+        " "+
+        "<"+
+        o(id).value.trim()+
+        "> ?"+
+        "cc="+o( ( id === "field6" ) ? "field7" : "field6" ).value;
+    }
+}
+//==============================================
+function callNumber(id){
+    if ( o(id).value.trim() !== null && o(id).value.trim() !== "*" && o(id).value.trim() !== ""  ){
+        if ( confirm("OK to Dial Number?")  ) {
+            document.location.href = "tel:" + o(id).value.trim(); 
+        }
+    }    
+}
+//===============================================
+function showNext(){
      if ( window.event.keyCode === 39 ) forward();
      else if( window.event.keyCode === 37 ) reverse();
 }
 //=================================================
 function senseChange(){
- if (o("match").value.toLowerCase() !== currentMatch.toLowerCase()) search();
- callAfterMilliseconds(senseChange,300);
+    if ( o("match").value.toLowerCase() !== currentMatch.toLowerCase() ){
+        search();
+    }
+    callAfterMilliseconds( senseChange,300 );
 }
-//=================================================
+//===============================================
 function init(){
     o("match").focus();
-    ajax.open("GET", "https://dl.dropbox.com/u/21142484/_SIT213/SecondTry/docs/people.csv", true );
+    ajax.open("GET", "https://dl.dropbox.com/u/21142484/_SIT213/SecondTry/docs/ComputerStudents.csv", true );
     ajax.onreadystatechange = function() {
         if ( ajax.readyState == 4 ){
             if ( ajax.status == 200 || ajax.status == 0 ){
@@ -253,32 +317,12 @@ function init(){
                 nowShowRecord();
             }
             else { 
-                if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();                
+                if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();
             }            
         }      
     };
     ajax.send(null);
 }
-//==============================================
-function singularPlural(word,count){
-    return ((count == 1)?word:word+"es");
-}
-//===============================================
-function email(){
-    o("field2").select();
-    if ( confirm("Is it OK to send an email\rto this address?\r(If not, Cancel)") ){
-        o("mail").href="mailto:".o("field2").value;
-        o("mail").click();
-    }  
-}
 //===============================================
 senseChange();
-//===============================================
-
-/*
-location.assign(publink+txtPwd.value+"/forms.html");
-href="mailto:Aabdulmalik@PIT.edu?Subject=Suggestions%20for%20Forms%20Website">Aabdulmalik@PIT.edu
-*/
-
-
-
+//=================================================
