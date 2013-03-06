@@ -86,11 +86,14 @@ function nowShowRecord(){
         }
         catch(err){}
     }
-    o("c").innerHTML = recordPointer;
-    if( matchCount != 0 ){
-        o('matchIndex').innerHTML = indexPointer +1;
-        o('sp').innerHTML = singularPlural("match", matchCount);
-    }    
+    try{
+        o("c").innerHTML = recordPointer;
+        if( matchCount != 0 ){
+            o('matchIndex').innerHTML = indexPointer +1;
+            o('sp').innerHTML = singularPlural("match", matchCount);
+        }
+    }
+    catch(err){}
 }
 //=============Reverse Button Handler===========
 function reverse(){
@@ -298,8 +301,12 @@ function showNext(){
 }
 //=================================================
 function senseChange(){
-    if ( o("match").value.toLowerCase() !== currentMatch.toLowerCase() ){
-        search();
+    try{
+        if ( o("match").value.toLowerCase() !== currentMatch.toLowerCase() ){
+            search();
+        }
+    }
+    catch(err){
     }
     callAfterMilliseconds( senseChange,300 );
 }
@@ -312,8 +319,12 @@ function init(){
             if ( ajax.status == 200 || ajax.status == 0 ){
                 records = ajax.responseText.split("\r");
                 recordCount = records.length;
-                o("c").innerHTML = recordPointer;
-                o("m").innerHTML = recordCount - 1;
+                try{
+                    o("c").innerHTML = recordPointer;
+                    o("m").innerHTML = recordCount - 1;
+                }
+                catch(err){
+                }
                 nowShowRecord();
             }
             else { 
