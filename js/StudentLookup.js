@@ -75,7 +75,7 @@ objectEventHandler( window, "load", function(){
             var record = records[recordPointer].split(",");
         }
         catch(err){
-            return; //in case records[recordPointer] is undefined and can't split()
+            //return; //in case records[recordPointer] is undefined and can't split()
         }
         try{
             o("field0").value = record[0];
@@ -309,7 +309,7 @@ objectEventHandler( window, "load", function(){
         }
         catch(err){
         }
-        callAfterMilliseconds( senseChange,3*delay );
+        callAfterMilliseconds( senseChange,delay );
     }
     //===============================================
     function init(){
