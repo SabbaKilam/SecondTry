@@ -12,7 +12,7 @@ var ajax = new HttpObject()
 , currentMatch = ""
 ;
 //==============Handlers and Functions=============
-objectEventHandler( window, "load", init );
+//objectEventHandler( window, "load", init );
 //=================================================
 objectEventHandler( o("match"), "keyup", search );
 //=================================================
@@ -317,7 +317,7 @@ function init(){
     ajax.onreadystatechange = function() {
         try{
             if ( ajax.readyState == 4 ){
-                if ( ajax.status == 200 || ajax.status == 0 ){
+                if ( ajax.status == 200 || ajax.status == 0 ){      
                     records = ajax.responseText.split("\r");
                     recordCount = records.length;                    
                         o("c").innerHTML = recordPointer;
@@ -336,5 +336,6 @@ function init(){
     ajax.send(null);
 }
 //===============================================
+init();
 senseChange();
 //=================================================
