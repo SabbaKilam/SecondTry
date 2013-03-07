@@ -315,22 +315,23 @@ function init(){
     o("match").focus();
     ajax.open("GET", "https://dl.dropbox.com/u/21142484/StudentNames/ComputerStudents.csv", true );
     ajax.onreadystatechange = function() {
-        if ( ajax.readyState == 4 ){
-            if ( ajax.status == 200 || ajax.status == 0 ){
-                records = ajax.responseText.split("\r");
-                recordCount = records.length;
-                try{
-                    o("c").innerHTML = recordPointer;
-                    o("m").innerHTML = recordCount - 1;
+        try{
+            if ( ajax.readyState == 4 ){
+                if ( ajax.status == 200 || ajax.status == 0 ){
+                    records = ajax.responseText.split("\r");
+                    recordCount = records.length;                    
+                        o("c").innerHTML = recordPointer;
+                        o("m").innerHTML = recordCount - 1;
+                    nowShowRecord();
                 }
-                catch(err){
-                }
-                nowShowRecord();
+                else { 
+                    if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();
+                }            
             }
-            else { 
-                if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();
-            }            
-        }      
+        }
+        catch(err){
+            if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();            
+        }
     };
     ajax.send(null);
 }
