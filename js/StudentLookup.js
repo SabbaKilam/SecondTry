@@ -314,7 +314,7 @@ objectEventHandler( window, "load", function(){
     //===============================================
     function init(){
         o("match").focus();
-        ajax.open("GET", "https://dl.dropbox.com/u/21142484/StudentNames/ComputerStudents.csv", true );
+        ajax.open("GET", "https://dl.dropbox.com/u/21142484/_SIT213/SecondTry/docs/ComputerStudents.csv", true );
         ajax.onreadystatechange = function() {
             try{
                 if ( ajax.readyState == 4 ){
