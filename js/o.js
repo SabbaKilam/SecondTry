@@ -42,25 +42,7 @@ function inStr(main,sub){
   }
   return flag;
 };
-//==========check if ajax uploads files. Returns true or false=========================
-ajaxUploadsFiles = function() {//http://blog.new-bamboo.co.uk/2012/01/10/ridiculously-simple-ajax-uploads-with-formdata
-    return supportFileAPI() && supportAjaxUploadProgressEvents() && supportFormData();
-//------------------internal functions-----------------------    
-    function supportFileAPI() {
-        var fi = document.createElement('INPUT');
-        fi.type = 'file';
-        return 'files' in fi;
-    }
-//------------------------------------------------------------    
-    function supportAjaxUploadProgressEvents() {
-        var xhr = new HttpObject;//XMLHttpRequest();
-        return !! (xhr && ('upload' in xhr) && ('onprogress' in xhr.upload));
-    }
-//------------------------------------------------------------    
-    function supportFormData() {
-        return !! window.FormData;
-   }
-};    
+  
 //=========================================================================
     function tagArray(o,s){
         return o.getElementsByTagName(s);
@@ -83,7 +65,30 @@ function callAfterMilliseconds(functionName,delay){
     return  setTimeout(functionName, delay)
 }
 //=====================================================
+/*
+//==check if ajax uploads files. Returns true or false=========================
+ajaxUploadsFiles = function() {//http://blog.new-bamboo.co.uk/2012/01/10/ridiculously-simple-ajax-uploads-with-formdata
+    return supportFileAPI() && supportAjaxUploadProgressEvents() && supportFormData();
+//------------------internal functions-----------------------    
+    function supportFileAPI() {
+        var fi = document.createElement('INPUT');
+        fi.type = 'file';
+        return 'files' in fi;
+    }
+//------------------------------------------------------------    
+    function supportAjaxUploadProgressEvents() {
+        var xhr = new HttpObject;//XMLHttpRequest();
+        return !! (xhr && ('upload' in xhr) && ('onprogress' in xhr.upload));
+    }
+//------------------------------------------------------------    
+    function supportFormData() {
+        return !! window.FormData;
+   }
+};  
 
+
+
+*/
 
 
 

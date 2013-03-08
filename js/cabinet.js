@@ -14,7 +14,6 @@ objectEventHandler( window, "load", function(){
     , currentMatch = ""
     ;
     //==============Handlers and Functions=============
-
     objectEventHandler( o("match"), "keyup", search );
     //=================================================
     objectEventHandler( o("match"), "change", search );
